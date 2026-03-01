@@ -4,40 +4,43 @@ const TARGET_DIM = "mypack:endlessdesert"; // 対象ディメンション
 let lastDeathTick = -999999; // 最後に死亡したtickを記録
 const COOLDOWN_TICKS = 1 * 60 * 20; // 15分 = 18000tick
 
-// === スポーン設定の追加
-ServerEvents.tick(event => {
-  if (event.server.gameTime % (1 * 60 * 20) !== 0) return;
+// === スポーン設定
+ServerEvents.tick((event) => {
+  const nowtick = event.server.getLevel("minecraft:overworld").time;
+  debug(`[tick] at tick ${nowtick} server:${event.server} level:"${event.level}`);
+
+  if (nowtick % (1 * 60 * 20) !== 0) return;
 
   const level = event.server.getLevel(TARGET_DIM);
   const player = level.players[0];
   if (!player) return;
 
-  const base = player.blockPosition();
   const pos = {
     x: 20,
     y: 70,
-    z: 20
+    z: 20,
   };
 
-  level.spawnEntity(TARGET_MOB, pos);
+  event.server.runCommand(`summon ${TARGET_MOB} ${pos.x} ${pos.y} ${pos.z} {PersistenceRequired:1b}`);
+  debug(`[tick] spawn ${TARGET_MOB} ${TARGET_DIM} ${nowtick}`);
 });
 
-
-
 // === 死亡イベント
-EntityEvents.death(event => {
-  debug(`[entityDeath] ${TARGET_MOB} at tick ${event.server.gameTime}`);
+EntityEvents.death((event) => {
+  const nowtick = event.server.getLevel("minecraft:overworld").time;
+  debug(`[entityDeath] at tick ${nowtick}`);
 
   const e = event.entity;
   if (e.type != TARGET_MOB) return;
   if (e.level.dimension != TARGET_DIM) return;
 
-  lastDeathTick = event.server.gameTime;
+  debug(`[entityDeath] ${TARGET_MOB} died at ${nowtick} tick, the previous death was at ${lastDeathTick}`);
+  lastDeathTick = nowtick;
 });
 
 // === スポーンイベント
-EntityEvents.spawned(event => {
-  debug(`[entitySpawned] ${TARGET_MOB} at tick ${event.server.gameTime}`);
+EntityEvents.spawned((event) => {
+  debug(`[entitySpawned] at tick ${event.server.gameTime}`);
 
   const e = event.entity;
   if (e.type != TARGET_MOB) return;
