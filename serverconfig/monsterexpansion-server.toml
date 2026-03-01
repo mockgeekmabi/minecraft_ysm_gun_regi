@@ -1,0 +1,56 @@
+
+[general_stats]
+
+	#Settings for all the monsters. Changes done here affect all the monsters. These also stack with individual multipliers so keep that in mind.
+	[general_stats.general]
+		#Maximum health multiplier. (eg. 2 to double it, 0.5 to halve it)
+		#Range: 0.0 ~ 1000.0
+		maxHealthMultiplier = 2.0
+		#Attack damage multiplier. (eg. 2 to double it, 0.5 to halve it)
+		#Range: 0.0 ~ 1000.0
+		attackDamageMultiplier = 1.0
+
+[skrythe_stats]
+
+	#Settings for the Skrythe.
+	[skrythe_stats.general]
+		#Maximum health multiplier for the Skrythe. (eg. 2 to double it, 0.5 to halve it)
+		#Range: 0.0 ~ 1000.0
+		maxHealthMultiplier = 1.0
+		#Attack damage multiplier for the Skrythe. (eg. 2 to double it, 0.5 to halve it)
+		#Range: 0.0 ~ 1000.0
+		attackDamageMultiplier = 1.0
+
+[rhyza_stats]
+
+	#Settings for the Rhyza.
+	[rhyza_stats.general]
+		#Maximum health multiplier for the Rhyza. (eg. 2 to double it, 0.5 to halve it)
+		#Range: 0.0 ~ 1000.0
+		maxHealthMultiplier = 1.0
+		#Attack damage multiplier for the Rhyza. (eg. 2 to double it, 0.5 to halve it)
+		#Range: 0.0 ~ 1000.0
+		attackDamageMultiplier = 1.0
+
+[rakoth_stats]
+
+	#Settings for the Rakoth.
+	[rakoth_stats.general]
+		#Maximum health multiplier for the Rakoth. (eg. 2 to double it, 0.5 to halve it)
+		#Range: 0.0 ~ 1000.0
+		maxHealthMultiplier = 1.0
+		#Attack damage multiplier for the Rakoth. (eg. 2 to double it, 0.5 to halve it)
+		#Range: 0.0 ~ 1000.0
+		attackDamageMultiplier = 1.0
+
+[leivekilth_stats]
+
+	#Settings for the Leivekilth.
+	[leivekilth_stats.general]
+		#Maximum health multiplier for the Leivekilth. (eg. 2 to double it, 0.5 to halve it)
+		#Range: 0.0 ~ 1000.0
+		maxHealthMultiplier = 1.0
+		#Attack damage multiplier for the Leivekilth. (eg. 2 to double it, 0.5 to halve it)
+		#Range: 0.0 ~ 1000.0
+		attackDamageMultiplier = 1.0
+

@@ -1,0 +1,18 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "AX"
+    ],
+    "key": {
+        "A": {
+            "item": "car:canola_methanol_mix_bucket"
+        },
+        "X": {
+            "item": "minecraft:bucket"
+        }
+    },
+    "result": {
+        "item": "car:bio_diesel_bucket",
+        "count": 1
+    }
+}

@@ -1,0 +1,20 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "AAA",
+        "AAA",
+        "AXA"
+    ],
+    "key": {
+        "A": {
+            "tag": "minecraft:logs"
+        },
+        "X": {
+            "item": "minecraft:bucket"
+        }
+    },
+    "result": {
+        "item": "car:methanol_bucket",
+        "count": 1
+    }
+}

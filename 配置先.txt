@@ -1,0 +1,10 @@
+/opt/minecraft/forge-1.20.1-47.4.10/config
+
+/opt/minecraft/forge-1.20.1-47.4.10/world/datapacks
+
+/opt/minecraft/forge-1.20.1-47.4.10/kubejs
+
+/opt/minecraft/forge-1.20.1-47.4.10/world/serverconfig
+ 
+/opt/minecraft/forge-1.20.1-47.4.10/config/yes_steve_model/custom
+

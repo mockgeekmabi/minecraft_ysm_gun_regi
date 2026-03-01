@@ -1,0 +1,38 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "WAX",
+        "BZC",
+        "YDZ"
+    ],
+    "key": {
+        "A": {
+            "item": "minecraft:iron_block"
+        },
+        "B": {
+            "item": "minecraft:diamond"
+        },
+        "C": {
+            "item": "minecraft:redstone_block"
+        },
+        "D": {
+            "item": "minecraft:quartz"
+        },
+        "W": {
+            "item": "rustic_engineer:air_ship_item"
+        },
+        "X": {
+            "item": "rustic_engineer:dragonfly_item"
+        },
+        "Y": {
+            "item": "rustic_engineer:abyssal_submarine_item"
+        },
+        "Z": {
+            "item": "rustic_engineer:spider_mech_item"
+        }
+    },
+    "result": {
+        "item": "pomkotsmechs:corestone_pmv03",
+        "count": 1
+    }
+}

@@ -1,0 +1,26 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "AAA",
+        "CXC",
+        "ADA"
+    ],
+    "key": {
+        "A": {
+            "item": "minecraft:iron_block"
+        },
+        "C": {
+            "item": "minecraft:redstone_block"
+        },
+        "D": {
+            "item": "minecraft:quartz"
+        },
+        "X": {
+            "item": "pomkotsmechs:corestone_pmv01b"
+        }
+    },
+    "result": {
+        "item": "pomkotsmechs:corestone_pmv01b",
+        "count": 1
+    }
+}
