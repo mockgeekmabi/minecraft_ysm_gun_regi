@@ -1,5 +1,5 @@
 {
-  "ambient_light": 0.5,
+  "ambient_light": 0.3,
   "bed_works": true,
   "coordinate_scale": 1,
   "effects": "mypack:fixdesert1",
@@ -14,8 +14,8 @@
   "monster_spawn_light_level": {
     "type": "minecraft:uniform",
     "value": {
-      "max_inclusive": 15,
-      "min_inclusive": 0
+      "min_inclusive": 0,
+      "max_inclusive": 15
     }
   },
   "natural": true,

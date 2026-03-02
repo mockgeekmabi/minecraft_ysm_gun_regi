@@ -31,9 +31,7 @@
       "minecraft:lake_lava_underground",
       "minecraft:lake_lava_surface"
     ],
-    [
-      "minecraft:amethyst_geode"
-    ],
+    [],
     [
       "minecraft:fossil_upper",
       "minecraft:fossil_lower"
@@ -49,7 +47,7 @@
       "minecraft:ore_redstone_lower",
       "minecraft:ore_diamond",
       "minecraft:ore_diamond_large",
-      "minecraft:ore_diamond_buried"     
+      "minecraft:ore_diamond_buried"
     ],
     [],
     [
@@ -96,37 +94,37 @@
         "type": "binah:white_cube",
         "maxCount": 4,
         "minCount": 4,
-        "weight": 100
+        "weight": 10
       },
       {
         "type": "binah:black_cube",
         "maxCount": 4,
         "minCount": 4,
-        "weight": 100
+        "weight": 10
       },
       {
         "type": "binah:yallow_cube",
         "maxCount": 4,
         "minCount": 4,
-        "weight": 100
+        "weight": 10
       },
       {
         "type": "binah:droid",
         "maxCount": 1,
         "minCount": 1,
-        "weight": 100
+        "weight": 10
       },
       {
         "type": "binah:drone_missile",
         "maxCount": 1,
         "minCount": 1,
-        "weight": 100
+        "weight": 10
       },
       {
         "type": "binah:goliath",
         "maxCount": 1,
         "minCount": 1,
-        "weight": 100
+        "weight": 10
       }
     ],
     "water_ambient": [],
