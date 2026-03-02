@@ -31,7 +31,7 @@
         "temperature": 0,
         "vegetation": 0,
         "continents": 0,
-        "erosion": 1,
+        "erosion": 100,
         "depth": 0,
         "ridges": 0,
         "initial_density_without_jaggedness": 0,
