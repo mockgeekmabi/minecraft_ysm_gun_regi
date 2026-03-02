@@ -1,74 +1,92 @@
 // === 設定 ===
-const TARGET_MOB = "binah:binah_v_2"; // 対象モブID
-const TARGET_DIM = "mypack:endlessdesert"; // 対象ディメンション
 let lastDeathTick = -999999; // 最後に死亡したtickを記録
 const COOLDOWN_TICKS = 1 * 60 * 20; // 15分 = 18000tick
 
+// === モブ情報構造体（指定された3つのみ） ===
+const bossinfos = [
+  {
+    mob: "binah:binah_v_2",
+    dim: "mypack:endlessdesert",
+    lastDeathTick: -999999,
+  },
+
+  // 必要ならここに追加
+  // {
+  //   mob: "example:mob",
+  //   dim: "example:dimension",
+  //   lastDeathTick: -999999
+  // }
+];
+
+// ボス召喚
+function spawnBoss(event) {
+  // === bossinfos をループ ===
+  for (const bossinfo of bossinfos) {
+    const level = event.server.getLevel(bossinfo.dim);
+
+    // --- ディメンションのロードチェック ---
+    if (level == null) {
+      debug(`[spawnBoss] discard level == null`);
+      continue;
+    }
+
+    // --- ディメンションに1体のみ ---
+    const existing = level
+      .getEntities()
+      .filter((ent) => ent.type == bossinfo.mob);
+    if (existing.length > 1) {
+      debug(`[spawnBoss] discard existing.length=${existing.length}`);
+      continue;
+    }
+
+    // --- 死亡後15分経過チェック ---
+    const elapsed = now - lastDeathTick;
+    if (elapsed < COOLDOWN_TICKS) {
+      debug(`[spawnBoss] discard elapsed=${elapsed}`);
+      continue;
+    }
+
+    // --- 召喚コマンド実行 ---
+    const pos = { x: 20, y: 70, z: 20 };
+    event.server.runCommand(
+      `summon ${bossinfo.mob} ${pos.x} ${pos.y} ${pos.z} {PersistenceRequired:1b}`,
+    );
+    debug(`[tick] spawn ${bossinfo.mob} ${bossinfo.dim} ${nowtick}`);
+  }
+}
+// ボス召喚
+function spawnMob(event) {}
+
 // === スポーン設定
 ServerEvents.tick((event) => {
-  const nowtick = event.server.getLevel("minecraft:overworld").time;
-  debug(`[tick] at tick ${nowtick} server:${event.server} level:"${event.level}`);
-
+  // --- 1分に1回処理を行う ---
   if (nowtick % (1 * 60 * 20) !== 0) return;
 
-  const level = event.server.getLevel(TARGET_DIM);
-  const player = level.players[0];
-  if (!player) return;
-
-  const pos = {
-    x: 20,
-    y: 70,
-    z: 20,
-  };
-
-  event.server.runCommand(`summon ${TARGET_MOB} ${pos.x} ${pos.y} ${pos.z} {PersistenceRequired:1b}`);
-  debug(`[tick] spawn ${TARGET_MOB} ${TARGET_DIM} ${nowtick}`);
+  const nowtick = event.server.getLevel("minecraft:overworld").time;
+  debug(
+    `[tick] at tick ${nowtick} server:${event.server} level:"${event.level}`,
+  );
+  
+  spawnBoss(event);
+  spawnMob(event);
 });
 
 // === 死亡イベント
 EntityEvents.death((event) => {
   const nowtick = event.server.getLevel("minecraft:overworld").time;
-  debug(`[entityDeath] at tick ${nowtick}`);
+  debug(`[death] at tick ${nowtick}`);
 
   const e = event.entity;
-  if (e.type != TARGET_MOB) return;
-  if (e.level.dimension != TARGET_DIM) return;
 
-  debug(`[entityDeath] ${TARGET_MOB} died at ${nowtick} tick, the previous death was at ${lastDeathTick}`);
-  lastDeathTick = nowtick;
-});
+  // === bossinfos をループ ===
+  for (const bossinfo of bossinfos) {
+    if (e.type !== bossinfo.mob) continue;
+    if (e.level.dimension !== bossinfo.dim) continue;
 
-// === スポーンイベント
-EntityEvents.spawned((event) => {
-  debug(`[entitySpawned] at tick ${event.server.gameTime}`);
+    debug(
+      `[death] ${bossinfo.mob} died at ${nowtick} tick, the previous death was at ${bossinfo.lastDeathTick}`,
+    );
 
-  const e = event.entity;
-  if (e.type != TARGET_MOB) return;
-  if (e.level.dimension != TARGET_DIM) return;
-
-  const now = event.server.gameTime;
-
-  // --- 座標条件: Y >= 64 ---
-  if (e.y < 64) {
-    debug(`[entitySpawned] discard y=${e.y}`);
-    e.discard();
-    return;
-  }
-
-  // --- ディメンションに1体のみ ---
-  const existing = level.getEntities().filter((ent) => ent.type == TARGET_MOB);
-
-  if (existing.length > 1) {
-    debug(`[entitySpawned] discard existing.length=${existing.length}`);
-    e.discard();
-    return;
-  }
-
-  // --- 死亡後15分経過チェック ---
-  const elapsed = now - lastDeathTick;
-  if (elapsed < COOLDOWN_TICKS) {
-    debug(`[entitySpawned] discard now=${now} lastDeathTick=${lastDeathTick}`);
-    e.discard();
-    return;
+    bossinfo.lastDeathTick = nowtick;
   }
 });
