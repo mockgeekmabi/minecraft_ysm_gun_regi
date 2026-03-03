@@ -1,12 +1,12 @@
 {
-  "type": "mypack:endlessdesert",
+  "type": "mypack:endlessdimtype",
   "generator": {
     "type": "minecraft:noise",
     "biome_source": {
       "type": "minecraft:multi_noise",
       "biomes": [
         {
-          "biome": "mypack:nameless_desert",
+          "biome": "mypack:nameless_biome",
           "parameters": {
             "temperature": 0,
             "humidity": 0,
@@ -20,8 +20,8 @@
       ]
     },
     "settings": {
-      "name": "mypack:endlessdesert",
-      "sea_level": 0,
+      "name": "mypack:endless_tundra",
+      "sea_level": 54,
       "legacy_random_source": true,
       "disable_mob_generation": false,
       "aquifers_enabled": false,
@@ -30,7 +30,7 @@
         "Name": "minecraft:obsidian"
       },
       "default_fluid": {
-        "Name": "minecraft:air"
+        "Name": "minecraft:water"
       },
       "spawn_target": [],
       "noise": {
@@ -164,7 +164,7 @@
             "if_true": {
               "type": "minecraft:biome",
               "biome_is": [
-                "mypack:nameless_desert"
+                "mypack:nameless_biome"
               ]
             },
             "then_run": {
@@ -193,14 +193,14 @@
                         "then_run": {
                           "type": "minecraft:block",
                           "result_state": {
-                            "Name": "minecraft:sand"
+                            "Name": "minecraft:ice"
                           }
                         }
                       },
                       {
                         "type": "minecraft:block",
                         "result_state": {
-                          "Name": "minecraft:sandstone"
+                          "Name": "minecraft:blue_ice"
                         }
                       }
                     ]
@@ -218,7 +218,7 @@
                   "then_run": {
                     "type": "minecraft:block",
                     "result_state": {
-                      "Name": "minecraft:sandstone"
+                      "Name": "minecraft:blue_ice"
                     }
                   }
                 }
