@@ -2,17 +2,17 @@
 const teleinfos = [
   {
     itemid: "binah:binah_egg",
-    dim: "mypack:endless_desert",
+    dim: "mypack:endless_desert_1",
     pos: { x: 0, y: 66, z: 0 }
   },
   {
     itemid: "binah:goliath_vehicle_kit",
-    dim: "mypack:endless_tundra",
+    dim: "mypack:endless_tundra_1",
     pos: { x: 0, y: 66, z: 0 }
   },
   {
     itemid: "pomkotsmechs:quest_sheet_01",
-    dim: "mypack:endless_copper",
+    dim: "mypack:endless_copper_1",
     pos: { x: 0, y: 66, z: 0 }
   },
 ];
@@ -20,8 +20,9 @@ const TELEPORT_ITEM = "binah:binah_egg"; // 対象アイテム
 const TELEPORT_DIM = "mypack:endlessdesert"; // 対象ディメンション
 
 ItemEvents.rightClicked((event) => {
+  const nowtick = event.server.getLevel("minecraft:overworld").time;
   debug(
-    `[rightClicked] ${event.player.username} ${event.item.id} ${event.player.level.dimension}`,
+    `[${nowtick}][rightClicked] ${event.player.username} ${event.item.id} ${event.player.level.dimension}`,
   );
 
   // --- 右クリックされたアイテムがテレポート対象の場合処理 ---

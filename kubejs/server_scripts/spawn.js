@@ -5,23 +5,27 @@ const COOLDOWN_TICKS = 2 * 60 * 20; // 15分 = 18000tick
 const bossinfos = [
   {
     bossid: "binah:binah_v_2",
-    dim: "mypack:endless_desert",
+    dim: "mypack:endless_desert_1",
+    bossSpawnRangeMin: 32,
+    bossSpawnRangeMax: 64,
+    mobSpawnRangeMin: 24,
+    mobSpawnRangeMax: 64,
     lastDeathTick: -999999,
     mobinfos: [
       {
         mobid: "binah:white_cube",
         spawnCount: 4,
-        maxCount: 15,
+        maxCount: 10,
       },
       {
         mobid: "binah:black_cube",
         spawnCount: 4,
-        maxCount: 15,
+        maxCount: 10,
       },
       {
         mobid: "binah:yallow_cube",
         spawnCount: 4,
-        maxCount: 15,
+        maxCount: 10,
       },
       {
         mobid: "inah:droid",
@@ -31,12 +35,12 @@ const bossinfos = [
       {
         mobid: "binah:drone_missile",
         spawnCount: 1,
-        maxCount: 8,
+        maxCount: 4,
       },
       {
         mobid: "binah:goliath",
         spawnCount: 1,
-        maxCount: 2,
+        maxCount: 1,
       },
     ],
   },
@@ -69,37 +73,64 @@ function getRundomNum(min, max, signFlag) {
 }
 
 // ====== 召喚座標のランダム決定(プレイヤー座標基準) ======
-function getRandomSpawnBlock(players, spawnRangeMin, spawnRangeMax, nowtick) {
+function getRandomSpawnBlock(players, spawnRangeMin, spawnRangeMax, level, nowtick) {
   debug(`[${nowtick}][getRandomSpawnBlock] start`);
 
   // --- 対象ユーザの選択 ---
   const indexMin = 0;
-  const indexMax = players.length-1;
+  const indexMax = players.length - 1;
   const index = Math.floor(getRundomNum(indexMin, indexMax, false));
   const player = players[index];
-  debug(`[${nowtick}][getRandomSpawnBlock] info index:${index} player:${JSON.stringify(player)}`);
+  debug(
+    `[${nowtick}][getRandomSpawnBlock] info index:${index} player:${JSON.stringify(player)}`,
+  );
 
   // --- 対象ユーザをベースにXZ座標を乱数取得 ---
   // --- Y座標はユーザと同じ座標で仮決定 ---
-  let blockX = Math.floor(
+  let spawnX = Math.floor(
     player.x + getRundomNum(spawnRangeMin, spawnRangeMax, true),
   );
-  let blockY = Math.floor(player.y);
-  let blockZ = Math.floor(
+  let spawnY = Math.floor(player.y);
+  let spawnZ = Math.floor(
     player.z + getRundomNum(spawnRangeMin, spawnRangeMax, true),
   );
 
   // --- Y座標のブロックを確認 ---
-  // 空気ブロックの場合、１つ下が空気以外であることを確認
-  // 空気以外の場合、１つ上が空気ブロックであることを確認
-  let playerBlock = {
+  let spawnBlock = level.getBlock(spawnX, spawnY, spawnZ);
+  let bottomY = spawnY - 1;
+  let topY = spawnY + 1;
+  if (spawnBlock.id === "minecraft:air") {
+    // 空気ブロックの場合、１つ下が空気以外であることを確認
+    let bottomBlock = level.getBlock(spawnX, bottomY, spawnZ);
+    while (bottomBlock.id === "minecraft:air") {
+      spawnY = spawnY - 1;
+      bottomY = bottomY - 1;
+      bottomBlock = level.getBlock(spawnX, bottomY, spawnZ);
+      debug(
+        `[${nowtick}][getRandomSpawnBlock] info ${spawnX}, ${bottomY}, ${spawnZ} is air`,
+      );
+    }
+  } else {
+    // 空気以外の場合、１つ上が空気ブロックであることを確認
+    let topBlock = level.getBlock(spawnX, topY, spawnZ);
+    while (topBlock.id !== "minecraft:air") {
+      spawnY = spawnY +1;
+      topY = topY +1;
+      topBlock = level.getBlock(spawnX, topY, spawnZ);
+      debug(
+        `[${nowtick}][getRandomSpawnBlock] info ${spawnX}, ${topY}, ${spawnZ} is not air`,
+      );
+    }
+  }
+
+  let targetBlock = {
     x: Math.floor(player.x),
     y: Math.floor(player.y),
     z: Math.floor(player.z),
   };
-  let resultBlock = { x: blockX, y: blockY, z: blockZ };
+  let resultBlock = { x: spawnX, y: spawnY, z: spawnZ };
   debug(
-    `[${nowtick}][getRandomSpawnBlock] info playerBlock:${JSON.stringify(playerBlock)} resultBlock:${JSON.stringify(resultBlock)}`,
+    `[${nowtick}][getRandomSpawnBlock] info targetBlock:${JSON.stringify(targetBlock)} resultBlock:${JSON.stringify(resultBlock)}`,
   );
 
   return resultBlock;
@@ -137,7 +168,7 @@ function spawnBoss(event, nowtick, bossinfo) {
     return dimId === bossinfo.dim;
   });
   //let pos = { x: 20, y: 70, z: 20 };
-  let pos = getRandomSpawnBlock(playersInDim, 32, 64, nowtick);
+  let pos = getRandomSpawnBlock(playersInDim, bossinfo.bossSpawnRangeMin, bossinfo.bossSpawnRangeMax, level, nowtick);
 
   // --- 召喚コマンド実行 ---
   event.server.runCommand(
@@ -145,7 +176,7 @@ function spawnBoss(event, nowtick, bossinfo) {
     //`summon ${bossinfo.bossid} ${pos.x} ${pos.y} ${pos.z} {PersistenceRequired:1b}`,
   );
   debug(
-    `[${nowtick}][spawnBoss] spawn ${bossinfo.bossid} ${bossinfo.dim} ${JSON.stringify(pos)}`,
+    `[${nowtick}][spawnBoss] spawn {${bossinfo.bossid}} {${bossinfo.dim}} ${JSON.stringify(pos)}`,
   );
 }
 
@@ -163,9 +194,7 @@ function spawnMob(event, nowtick, bossinfo) {
   let existing = level
     .getEntities()
     .filter((ent) => ent.type == bossinfo.bossid);
-  debug(
-    `[${nowtick}][spawnMob] info boss existing.length=${existing.length}`,
-  );
+  debug(`[${nowtick}][spawnMob] info boss existing.length=${existing.length}`);
   if (existing.length < 1) {
     // スポーンキャンセル
     return;
@@ -196,14 +225,14 @@ function spawnMob(event, nowtick, bossinfo) {
         let dimId = String(p.level.dimension);
         return dimId === bossinfo.dim;
       });
-      let pos = getRandomSpawnBlock(playersInDim, 24, 128, nowtick);
+      let pos = getRandomSpawnBlock(existing, bossinfo.mobSpawnRangeMin, bossinfo.mobSpawnRangeMax, level, nowtick);
       // --- 召喚コマンド実行 ---
       event.server.runCommandSilent(
         `execute as @p at @p run summon ${mobinfo.mobid} ${pos.x} ${pos.y} ${pos.z}`,
       );
       //event.level.spawnEntity(mobinfo.mobid, pos.x, pos.y, pos.z);
       debug(
-        `[${nowtick}][spawnMob] spawn ${mobinfo.mobid} ${bossinfo.dim} ${JSON.stringify(pos)}`,
+        `[${nowtick}][spawnMob] spawn {${mobinfo.mobid}} {${bossinfo.dim}} ${JSON.stringify(pos)}`,
       );
     }
   }
@@ -267,10 +296,10 @@ ServerEvents.tick((event) => {
 
 // ====== 死亡イベント ======
 EntityEvents.death((event) => {
-  const nowtick = event.server.getLevel("minecraft:overworld").time;
-  debug(`[${nowtick}][death] start`);
-
   const e = event.entity;
+  const nowtick = event.server.getLevel("minecraft:overworld").time;
+  debug(`[${nowtick}][death] start ${e.type}`);
+
 
   // --- bossinfos をループ ---
   for (let bossinfo of bossinfos) {

@@ -20,7 +20,7 @@
       ]
     },
     "settings": {
-      "name": "mypack:endless_tundra",
+      "name": "mypack:endless_desert_1",
       "sea_level": 54,
       "legacy_random_source": true,
       "disable_mob_generation": false,
@@ -193,14 +193,14 @@
                         "then_run": {
                           "type": "minecraft:block",
                           "result_state": {
-                            "Name": "minecraft:ice"
+                            "Name": "minecraft:sand"
                           }
                         }
                       },
                       {
                         "type": "minecraft:block",
                         "result_state": {
-                          "Name": "minecraft:blue_ice"
+                          "Name": "minecraft:sandstone"
                         }
                       }
                     ]
@@ -218,7 +218,7 @@
                   "then_run": {
                     "type": "minecraft:block",
                     "result_state": {
-                      "Name": "minecraft:blue_ice"
+                      "Name": "minecraft:sandstone"
                     }
                   }
                 }
