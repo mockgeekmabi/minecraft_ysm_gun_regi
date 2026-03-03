@@ -24,7 +24,7 @@
 	[inventory.mainhand]
 		#Percent chance to keep mainhand item
 		#Range: -1.0 ~ 1.0
-		mainhandKeepChance = -1.0
+		mainhandKeepChance = 1.0
 		#Percent chance to destroy dropped mainhand item
 		#Range: -1.0 ~ 1.0
 		mainhandDestroyChance = -1.0
@@ -52,7 +52,7 @@
 	[inventory.offhand]
 		#Percent chance to keep offhand item
 		#Range: -1.0 ~ 1.0
-		offhandKeepChance = -1.0
+		offhandKeepChance = 1.0
 		#Percent chance to destroy dropped offhand item
 		#Range: -1.0 ~ 1.0
 		offhandDestroyChance = -1.0
@@ -66,7 +66,7 @@
 	[inventory.main]
 		#Percent chance to keep main inventory items
 		#Range: -1.0 ~ 1.0
-		mainKeepChance = 1.0
+		mainKeepChance = -1.0
 		#Percent chance to destroy dropped main inventory items
 		#Range: -1.0 ~ 1.0
 		mainDestroyChance = -1.0
