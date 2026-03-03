@@ -5,7 +5,7 @@ const COOLDOWN_TICKS = 2 * 60 * 20; // 15分 = 18000tick
 const bossinfos = [
   {
     bossid: "binah:binah_v_2",
-    dim: "mypack:fix_desert_1",
+    dim: "mypack:endless_desert",
     lastDeathTick: -999999,
     mobinfos: [
       {

@@ -2,12 +2,12 @@
 const teleinfos = [
   {
     itemid: "binah:binah_egg",
-    dim: "mypack:fix_desert_1",
+    dim: "mypack:endless_desert",
     pos: { x: 0, y: 66, z: 0 }
   },
   {
     itemid: "binah:goliath_vehicle_kit",
-    dim: "mypack:endlesstundra",
+    dim: "mypack:endless_tundra",
     pos: { x: 0, y: 66, z: 0 }
   },
   {
