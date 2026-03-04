@@ -16,7 +16,7 @@
 	#Format: modid:item;[keep/drop/destroy]
 	itemSettings = []
 	#Set to true to limit durability loss so that items do not break from death penalties
-	limitDurabilityLoss = false
+	limitDurabilityLoss = true
 	#Time (in seconds) that dropped items will take to despawn, -1 to disable despawning
 	#Range: > -1
 	dropDespawnTime = 300

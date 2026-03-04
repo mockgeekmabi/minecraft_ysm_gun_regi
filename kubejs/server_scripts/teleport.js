@@ -3,32 +3,32 @@ const teleinfos = [
   {
     itemid: "binah:binah_egg",
     dim: "mypack:endless_desert_1",
-    pos: { x: 0, y: 66, z: 0 }
+    pos: { x: -125, y: 66, z: 0 },
   },
   {
     itemid: "binah:goliath_vehicle_kit",
     dim: "mypack:endless_tundra_1",
-    pos: { x: 0, y: 66, z: 0 }
+    pos: { x: -125, y: 52, z: 0 },
   },
   {
     itemid: "pomkotsmechs:quest_sheet_01",
     dim: "mypack:endless_copper_1",
-    pos: { x: 0, y: 66, z: 0 }
+    pos: { x: 0, y: 66, z: 0 },
   },
   {
     itemid: "pomkotsmechs:quest_sheet_02",
     dim: "mypack:endless_iron_1",
-    pos: { x: 0, y: 66, z: 0 }
+    pos: { x: 0, y: 66, z: 0 },
   },
   {
     itemid: "pomkotsmechs:quest_sheet_03",
     dim: "mypack:endless_gold_1",
-    pos: { x: 0, y: 66, z: 0 }
+    pos: { x: 0, y: 66, z: 0 },
   },
   {
     itemid: "pomkotsmechs:quest_sheet_04",
     dim: "mypack:endless_netherite_1",
-    pos: { x: 0, y: 66, z: 0 }
+    pos: { x: 0, y: 66, z: 0 },
   },
 ];
 const TELEPORT_ITEM = "binah:binah_egg"; // 対象アイテム
@@ -48,14 +48,28 @@ ItemEvents.rightClicked((event) => {
 
       // endlessdesert 以外 → endlessdesert へ転移
       if (dim !== teleinfo.dim) {
+        let level = event.server.getLevel(teleinfo.dim);
+        let block = getScaffoldingBlock(
+          teleinfo.pos.x,
+          teleinfo.pos.y,
+          teleinfo.pos.z,
+          level,
+          nowtick,
+        );
+        debug(
+          `[${nowtick}][rightClicked] ${event.player.username} tp ${teleinfo.dim} ${block.x} ${block.y} ${block.z}`,
+        );
         player.server.runCommandSilent(
-          `execute in ${teleinfo.dim} run tp ${player.uuid} ${teleinfo.pos.x} ${teleinfo.pos.y} ${teleinfo.pos.z}`,
+          `execute in ${teleinfo.dim} run tp ${player.uuid} ${block.x} ${block.y} ${block.z}`,
         );
         return;
       }
 
       // endlessdesert → リスポーン地点 へ転移
       const info = inspectRespawnInfo(player);
+        debug(
+          `[${nowtick}][rightClicked] ${event.player.username} tp ${info.spawnDim} ${info.spawnPos.getX()} ${info.spawnPos.getY()} ${info.spawnPos.getZ()}`,
+        );
       player.server.runCommandSilent(
         `execute in ${info.spawnDim} run tp ${player.uuid} ${info.spawnPos.getX()} ${info.spawnPos.getY()} ${info.spawnPos.getZ()}`,
       );

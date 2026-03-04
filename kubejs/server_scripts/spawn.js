@@ -414,40 +414,12 @@ function getRandomSpawnBlock(players, spawnRangeMin, spawnRangeMax, level, nowti
     player.z + getRundomNum(spawnRangeMin, spawnRangeMax, true),
   );
 
-  // --- Y座標のブロックを確認 ---
-  let spawnBlock = level.getBlock(spawnX, spawnY, spawnZ);
-  let bottomY = spawnY - 1;
-  let topY = spawnY + 1;
-  if (spawnBlock.id === "minecraft:air") {
-    // 空気ブロックの場合、１つ下が空気以外であることを確認
-    let bottomBlock = level.getBlock(spawnX, bottomY, spawnZ);
-    while (bottomBlock.id === "minecraft:air") {
-      spawnY = spawnY - 1;
-      bottomY = bottomY - 1;
-      bottomBlock = level.getBlock(spawnX, bottomY, spawnZ);
-      debug(
-        `[${nowtick}][getRandomSpawnBlock] info ${spawnX}, ${bottomY}, ${spawnZ} is air`,
-      );
-    }
-  } else {
-    // 空気以外の場合、１つ上が空気ブロックであることを確認
-    let topBlock = level.getBlock(spawnX, topY, spawnZ);
-    while (topBlock.id !== "minecraft:air") {
-      spawnY = spawnY +1;
-      topY = topY +1;
-      topBlock = level.getBlock(spawnX, topY, spawnZ);
-      debug(
-        `[${nowtick}][getRandomSpawnBlock] info ${spawnX}, ${topY}, ${spawnZ} is not air`,
-      );
-    }
-  }
-
   let targetBlock = {
     x: Math.floor(player.x),
     y: Math.floor(player.y),
     z: Math.floor(player.z),
   };
-  let resultBlock = { x: spawnX, y: spawnY, z: spawnZ };
+  let resultBlock = getScaffoldingBlock(spawnX,spawnY,spawnZ, level,nowtick);
   debug(
     `[${nowtick}][getRandomSpawnBlock] info targetBlock:${JSON.stringify(targetBlock)} resultBlock:${JSON.stringify(resultBlock)}`,
   );
