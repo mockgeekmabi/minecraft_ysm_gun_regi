@@ -12,22 +12,22 @@ const teleinfos = [
   },
   {
     itemid: "pomkotsmechs:quest_sheet_01",
-    dim: "mypack:endless_copper_1",
+    dim: "mypack:_quest01",
     pos: { x: 0, y: 66, z: 0 },
   },
   {
     itemid: "pomkotsmechs:quest_sheet_02",
-    dim: "mypack:endless_iron_1",
+    dim: "mypack:_quest02",
     pos: { x: 0, y: 66, z: 0 },
   },
   {
     itemid: "pomkotsmechs:quest_sheet_03",
-    dim: "mypack:endless_gold_1",
+    dim: "mypack:_quest03",
     pos: { x: 0, y: 66, z: 0 },
   },
   {
     itemid: "pomkotsmechs:quest_sheet_04",
-    dim: "mypack:endless_netherite_1",
+    dim: "mypack:_quest04",
     pos: { x: 0, y: 66, z: 0 },
   },
 ];
@@ -67,9 +67,9 @@ ItemEvents.rightClicked((event) => {
 
       // endlessdesert → リスポーン地点 へ転移
       const info = inspectRespawnInfo(player);
-        debug(
-          `[${nowtick}][rightClicked] ${event.player.username} tp ${info.spawnDim} ${info.spawnPos.getX()} ${info.spawnPos.getY()} ${info.spawnPos.getZ()}`,
-        );
+      debug(
+        `[${nowtick}][rightClicked] ${event.player.username} tp ${info.spawnDim} ${info.spawnPos.getX()} ${info.spawnPos.getY()} ${info.spawnPos.getZ()}`,
+      );
       player.server.runCommandSilent(
         `execute in ${info.spawnDim} run tp ${player.uuid} ${info.spawnPos.getX()} ${info.spawnPos.getY()} ${info.spawnPos.getZ()}`,
       );

@@ -89,7 +89,7 @@ function getScaffoldingBlock(inputX, inputY, inputZ, level, nowtick) {
       );
     }
   }
-  scaX = scaX + 0.5;
+  scaX = scaX;
   scaY = scaY + 1;
   debug(
     `[${nowtick}][getScaffoldingBlock] info ${scaX}, ${scaY}, ${scaZ} is ${scaBlock.id}`,
