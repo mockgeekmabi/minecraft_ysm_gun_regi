@@ -15,6 +15,21 @@ const teleinfos = [
     dim: "mypack:endless_copper_1",
     pos: { x: 0, y: 66, z: 0 }
   },
+  {
+    itemid: "pomkotsmechs:quest_sheet_02",
+    dim: "mypack:endless_iron_1",
+    pos: { x: 0, y: 66, z: 0 }
+  },
+  {
+    itemid: "pomkotsmechs:quest_sheet_03",
+    dim: "mypack:endless_gold_1",
+    pos: { x: 0, y: 66, z: 0 }
+  },
+  {
+    itemid: "pomkotsmechs:quest_sheet_04",
+    dim: "mypack:endless_netherite_1",
+    pos: { x: 0, y: 66, z: 0 }
+  },
 ];
 const TELEPORT_ITEM = "binah:binah_egg"; // 対象アイテム
 const TELEPORT_DIM = "mypack:endlessdesert"; // 対象ディメンション

@@ -1,5 +1,5 @@
 // ====== 設定 ======
-const COOLDOWN_TICKS = 2 * 60 * 20; // 15分 = 18000tick
+const COOLDOWN_TICKS = 5 * 60 * 20; // 5分 = 6000tick
 
 // ====== ボス情報構造体 ======
 const bossinfos = [
@@ -7,59 +7,378 @@ const bossinfos = [
     bossid: "binah:binah_v_2",
     dim: "mypack:endless_desert_1",
     bossSpawnRangeMin: 32,
-    bossSpawnRangeMax: 64,
+    bossSpawnRangeMax: 80,
     mobSpawnRangeMin: 24,
-    mobSpawnRangeMax: 64,
+    mobSpawnRangeMax: 32,
     lastDeathTick: -999999,
     mobinfos: [
       {
         mobid: "binah:white_cube",
         spawnCount: 4,
         maxCount: 10,
+        spawnHeight: 0,
       },
       {
         mobid: "binah:black_cube",
         spawnCount: 4,
         maxCount: 10,
+        spawnHeight: 0,
       },
       {
         mobid: "binah:yallow_cube",
         spawnCount: 4,
         maxCount: 10,
+        spawnHeight: 0,
       },
       {
         mobid: "inah:droid",
         spawnCount: 1,
         maxCount: 4,
+        spawnHeight: 0,
       },
       {
         mobid: "binah:drone_missile",
         spawnCount: 1,
         maxCount: 4,
+        spawnHeight: 0,
       },
       {
         mobid: "binah:goliath",
         spawnCount: 1,
         maxCount: 1,
+        spawnHeight: 0,
       },
     ],
+  },
+   {
+     bossid: "binah:perorodzilla",
+     dim: "mypack:endless_tundra_1",
+     bossSpawnRangeMin: 32,
+     bossSpawnRangeMax: 64,
+     mobSpawnRangeMin: 24,
+     mobSpawnRangeMax: 64,
+     lastDeathTick: -999999,
+     mobinfos: [
+      {
+        mobid: "binah:perorod",
+        spawnCount: 5,
+        maxCount: 30,
+        spawnHeight: 1,
+      },
+    ],
+   },
+  {
+    bossid: "pomkotsmechs:pms01",
+    dim: "mypack:endless_copper_1",
+    bossSpawnRangeMin: 32,
+    bossSpawnRangeMax: 64,
+    mobSpawnRangeMin: 24,
+    mobSpawnRangeMax: 64,
+    lastDeathTick: -999999,
+    mobinfos: [
+     {
+     },
+   ],
+  },
+  {
+    bossid: "pomkotsmechs:pms02",
+    dim: "mypack:endless_copper_1",
+    bossSpawnRangeMin: 32,
+    bossSpawnRangeMax: 64,
+    mobSpawnRangeMin: 24,
+    mobSpawnRangeMax: 64,
+    lastDeathTick: -999999,
+    mobinfos: [
+     {
+     },
+   ],
+  },
+  {
+    bossid: "pomkotsmechs:pms03",
+    dim: "mypack:endless_copper_1",
+    bossSpawnRangeMin: 32,
+    bossSpawnRangeMax: 64,
+    mobSpawnRangeMin: 24,
+    mobSpawnRangeMax: 64,
+    lastDeathTick: -999999,
+    mobinfos: [
+     {
+     },
+   ],
+  },
+  {
+    bossid: "pomkotsmechs:pms04",
+    dim: "mypack:endless_copper_1",
+    bossSpawnRangeMin: 32,
+    bossSpawnRangeMax: 64,
+    mobSpawnRangeMin: 24,
+    mobSpawnRangeMax: 64,
+    lastDeathTick: -999999,
+    mobinfos: [
+     {
+     },
+   ],
+  },
+  {
+    bossid: "pomkotsmechs:pms05",
+    dim: "mypack:endless_copper_1",
+    bossSpawnRangeMin: 32,
+    bossSpawnRangeMax: 64,
+    mobSpawnRangeMin: 24,
+    mobSpawnRangeMax: 64,
+    lastDeathTick: -999999,
+    mobinfos: [
+     {
+     },
+   ],
+  },
+  {
+    bossid: "pomkotsmechs:pms06",
+    dim: "mypack:endless_copper_1",
+    bossSpawnRangeMin: 32,
+    bossSpawnRangeMax: 64,
+    mobSpawnRangeMin: 24,
+    mobSpawnRangeMax: 64,
+    lastDeathTick: -999999,
+    mobinfos: [
+     {
+     },
+   ],
+  },
+  {
+    bossid: "pomkotsmechs:pms07",
+    dim: "mypack:endless_copper_1",
+    bossSpawnRangeMin: 32,
+    bossSpawnRangeMax: 64,
+    mobSpawnRangeMin: 24,
+    mobSpawnRangeMax: 64,
+    lastDeathTick: -999999,
+    mobinfos: [
+     {
+     },
+   ],
+  },
+  {
+    bossid: "pomkotsmechs:pms08",
+    dim: "mypack:endless_copper_1",
+    bossSpawnRangeMin: 32,
+    bossSpawnRangeMax: 64,
+    mobSpawnRangeMin: 24,
+    mobSpawnRangeMax: 64,
+    lastDeathTick: -999999,
+    mobinfos: [
+     {
+     },
+   ],
+  },
+  {
+    bossid: "pomkotsmechs:pms09",
+    dim: "mypack:endless_copper_1",
+    bossSpawnRangeMin: 32,
+    bossSpawnRangeMax: 64,
+    mobSpawnRangeMin: 24,
+    mobSpawnRangeMax: 64,
+    lastDeathTick: -999999,
+    mobinfos: [
+     {
+     },
+   ],
+  },
+  {
+    bossid: "pomkotsmechs:pmb02",
+    dim: "mypack:endless_iron_1",
+    bossSpawnRangeMin: 32,
+    bossSpawnRangeMax: 64,
+    mobSpawnRangeMin: 24,
+    mobSpawnRangeMax: 32,
+    lastDeathTick: -999999,
+    mobinfos: [
+     {
+       mobid: "pomkotsmechs:pms02",
+       spawnCount: 4,
+       maxCount: 4,
+       spawnHeight: 0,
+     },
+   ],
+  },
+  {
+    bossid: "pomkotsmechs:pmb03",
+    dim: "mypack:endless_iron_1",
+    bossSpawnRangeMin: 32,
+    bossSpawnRangeMax: 64,
+    mobSpawnRangeMin: 24,
+    mobSpawnRangeMax: 32,
+    lastDeathTick: -999999,
+    mobinfos: [
+     {
+       mobid: "pomkotsmechs:pms01",
+       spawnCount: 1,
+       maxCount: 1,
+       spawnHeight: 0,
+     },
+     {
+       mobid: "pomkotsmechs:pms03",
+       spawnCount: 1,
+       maxCount: 1,
+       spawnHeight: 0,
+     },
+     {
+       mobid: "pomkotsmechs:pms04",
+       spawnCount: 1,
+       maxCount: 1,
+       spawnHeight: 0,
+     },
+     {
+       mobid: "pomkotsmechs:pms08",
+       spawnCount: 1,
+       maxCount: 1,
+       spawnHeight: 0,
+     },
+   ],
+  },
+  {
+    bossid: "pomkotsmechs:pmb05",
+    dim: "mypack:endless_iron_1",
+    bossSpawnRangeMin: 32,
+    bossSpawnRangeMax: 64,
+    mobSpawnRangeMin: 24,
+    mobSpawnRangeMax: 32,
+    lastDeathTick: -999999,
+    mobinfos: [
+     {
+       mobid: "pomkotsmechs:pms05",
+       spawnCount: 3,
+       maxCount: 3,
+       spawnHeight: 1,
+     },
+     {
+       mobid: "pomkotsmechs:pms09",
+       spawnCount: 1,
+       maxCount: 1,
+       spawnHeight: 0,
+     },
+   ],
+  },
+  {
+    bossid: "pomkotsmechs:pmb01",
+    dim: "mypack:endless_gold_1",
+    bossSpawnRangeMin: 32,
+    bossSpawnRangeMax: 64,
+    mobSpawnRangeMin: 24,
+    mobSpawnRangeMax: 32,
+    lastDeathTick: -999999,
+    mobinfos: [
+     {
+       mobid: "pomkotsmechs:pms06",
+       spawnCount: 2,
+       maxCount: 2,
+       spawnHeight: 0,
+     },
+     {
+       mobid: "pomkotsmechs:pms07",
+       spawnCount: 2,
+       maxCount: 2,
+       spawnHeight: 0,
+     },
+   ],
+  },
+  {
+    bossid: "pomkotsmechs:pmb01mk2",
+    dim: "mypack:endless_gold_1",
+    bossSpawnRangeMin: 32,
+    bossSpawnRangeMax: 64,
+    mobSpawnRangeMin: 24,
+    mobSpawnRangeMax: 32,
+    lastDeathTick: -999999,
+    mobinfos: [
+     {
+       mobid: "pomkotsmechs:pms06",
+       spawnCount: 2,
+       maxCount: 2,
+       spawnHeight: 0,
+     },
+     {
+       mobid: "pomkotsmechs:pms07",
+       spawnCount: 2,
+       maxCount: 2,
+       spawnHeight: 0,
+     },
+   ],
+  },
+  {
+    bossid: "pomkotsmechs:pmb04",
+    dim: "mypack:endless_gold_1",
+    bossSpawnRangeMin: 32,
+    bossSpawnRangeMax: 64,
+    mobSpawnRangeMin: 24,
+    mobSpawnRangeMax: 32,
+    lastDeathTick: -999999,
+    mobinfos: [
+     {
+       mobid: "pomkotsmechs:pms06",
+       spawnCount: 2,
+       maxCount: 2,
+       spawnHeight: 0,
+     },
+     {
+       mobid: "pomkotsmechs:pms07",
+       spawnCount: 2,
+       maxCount: 2,
+       spawnHeight: 0,
+     },
+   ],
+  },
+  {
+    bossid: "pomkotsmechs:pmb06",
+    dim: "mypack:endless_netherite_1",
+    bossSpawnRangeMin: 32,
+    bossSpawnRangeMax: 64,
+    mobSpawnRangeMin: 24,
+    mobSpawnRangeMax: 32,
+    lastDeathTick: -999999,
+    mobinfos: [
+     {
+       mobid: "pomkotsmechs:pmb01",
+       spawnCount: 1,
+       maxCount: 1,
+       spawnHeight: 0,
+     },
+     {
+       mobid: "pomkotsmechs:pmb01mk2",
+       spawnCount: 1,
+       maxCount: 1,
+       spawnHeight: 0,
+     },
+     {
+       mobid: "pomkotsmechs:pmb04",
+       spawnCount: 1,
+       maxCount: 1,
+       spawnHeight: 0,
+     },
+   ],
   },
 
   // 必要ならここに追加
   // {
   //   bossid: "example:mob",
   //   dim: "example:dimension",
+  //   bossSpawnRangeMin: 32,
+  //   bossSpawnRangeMax: 64,
+  //   mobSpawnRangeMin: 24,
+  //   mobSpawnRangeMax: 64,
   //   lastDeathTick: -999999,
   //   mobinfos: [
   //    {
   //      mobid: "example:mob",
   //      spawnCount: 1,
-  //      maxCount: 2
-  //    }
-  // }
+  //      maxCount: 2,
+  //      spawnHeight: 0,
+  //    },
+  //  ],
+  // },
 ];
 
-// ====== 召喚座標のランダム決定(プレイヤー座標基準) ======
+// ====== ランダム値取得 ======
 function getRundomNum(min, max, signFlag) {
   if (signFlag) {
     if (Math.floor(Math.random() * 2) === 0) {
@@ -226,6 +545,7 @@ function spawnMob(event, nowtick, bossinfo) {
         return dimId === bossinfo.dim;
       });
       let pos = getRandomSpawnBlock(existing, bossinfo.mobSpawnRangeMin, bossinfo.mobSpawnRangeMax, level, nowtick);
+      pos.y = pos.y + mobinfo.spawnHeight;
       // --- 召喚コマンド実行 ---
       event.server.runCommandSilent(
         `execute as @p at @p run summon ${mobinfo.mobid} ${pos.x} ${pos.y} ${pos.z}`,
@@ -286,8 +606,8 @@ ServerEvents.tick((event) => {
     );
   }
 
-  // --- 1分に1回処理を行う ---
-  if (nowtick % (1 * 60 * 20) !== 0) {
+  // --- 2分30秒に1回処理を行う ---
+  if (nowtick % (2.5 * 60 * 20) !== 0) {
     return;
   } else {
     spawnMonster(event, nowtick);
