@@ -3,16 +3,9 @@ const BOSS_COOLDOWN_TICKS = 5 * 60 * 20; // ボスリスポーン間隔
 const MOB_SPAWN_TICKS = 1 * 60 * 20; // モブスポーン間隔
 
 // ====== ボス情報構造体 ======
-const bossinfos = [
+const monsterinfos = [
   {
     bossid: "binah:binah_v_2",
-    dim: "mypack:endless_desert_1",
-    bossSpawnRangeMin: 32,
-    bossSpawnRangeMax: 80,
-    mobSpawnRangeMin: 24,
-    mobSpawnRangeMax: 32,
-    lastDeathTick: -999999,
-    rewards: [],
     mobinfos: [
       { mobid: "binah:white_cube", spawnCount: 4, maxCount: 10, spawnHeight: 0 },
       { mobid: "binah:black_cube", spawnCount: 4, maxCount: 10, spawnHeight: 0 },
@@ -21,9 +14,19 @@ const bossinfos = [
       { mobid: "binah:drone_missile", spawnCount: 1, maxCount: 4, spawnHeight: 0 },
       { mobid: "binah:goliath", spawnCount: 1, maxCount: 1, spawnHeight: 0 },
     ],
+    dim: "mypack:endless_desert_1",
+    bossSpawnRangeMin: 32,
+    bossSpawnRangeMax: 80,
+    mobSpawnRangeMin: 24,
+    mobSpawnRangeMax: 32,
+    lastDeathTick: -999999,
+    rewards: [],
   },
   {
     bossid: "binah:perorodzilla",
+    mobinfos: [
+      { mobid: "binah:perorod", spawnCount: 3, maxCount: 15, spawnHeight: 1 },
+    ],
     dim: "mypack:endless_tundra_1",
     bossSpawnRangeMin: 32,
     bossSpawnRangeMax: 64,
@@ -31,49 +34,29 @@ const bossinfos = [
     mobSpawnRangeMax: 48,
     lastDeathTick: -999999,
     rewards: [],
-    mobinfos: [
-      { mobid: "binah:perorod", spawnCount: 3, maxCount: 15, spawnHeight: 1 },
-    ],
   },
   {
     bossid: "pomkotsmechs:pms01",
+    mobinfos: [
+      { mobid: "binah:droid", spawnCount: 2, maxCount: 4, spawnHeight: 1 },
+    ],
     dim: "mypack:_quest01",
     bossSpawnRangeMin: 32,
     bossSpawnRangeMax: 64,
-    mobSpawnRangeMin: 12,
+    mobSpawnRangeMin: 2,
     mobSpawnRangeMax: 24,
     lastDeathTick: -999999,
     rewards: [
       { id: "pomkotsmechs:quest_sheet_02", num: 1 },
+      { id: "minecraft:glass", num: 16 },
+      { id: "minecraft:slime_block", num: 1 },
       { id: "minecraft:redstone_block", num: 1 },
       { id: "minecraft:gold_block", num: 1 },
       { id: "minecraft:diamond_block", num: 1 },
       { id: "minecraft:netherite_block", num: 1 },
       { id: "minecraft:netherite_upgrade_smithing_template", num: 1 }
     ],
-    mobinfos: [
-      { mobid: "binah:droid", spawnCount: 2, maxCount: 4, spawnHeight: 1 },
-    ],
   },
-
-  // 必要ならここに追加
-  // {
-  //   bossid: "example:mob",
-  //   dim: "example:dimension",
-  //   bossSpawnRangeMin: 32,
-  //   bossSpawnRangeMax: 64,
-  //   mobSpawnRangeMin: 24,
-  //   mobSpawnRangeMax: 64,
-  //   lastDeathTick: -999999,
-  //   mobinfos: [
-  //    {
-  //      mobid: "example:mob",
-  //      spawnCount: 1,
-  //      maxCount: 2,
-  //      spawnHeight: 0,
-  //    },
-  //  ],
-  // },
 ];
 
 // ====== ランダム値取得 ======
@@ -136,31 +119,41 @@ function getRandomSpawnBlock(players, spawnRangeMin, spawnRangeMax, level, nowti
   return resultBlock;
 }
 
+// ====== ランダム値取得 ======
+function getBossAlive(event, nowtick, monsterinfo) {
+  debug(`[${nowtick}][getBossAlive] start`);
+
+  let level = event.server.getLevel(monsterinfo.dim);
+  let existing = level
+    .getEntities()
+    .filter((ent) => ent.type == monsterinfo.bossid);
+  debug(`[${nowtick}][getBossAlive] info boss existing.length=${existing.length}`);
+
+  return existing;
+}
+
 // ====== BOSS召喚 ======
-function spawnBoss(event, nowtick, bossinfo) {
+function spawnBoss(event, nowtick, monsterinfo) {
   debug(`[${nowtick}][spawnBoss] start`);
 
-  let level = event.server.getLevel(bossinfo.dim);
+  let level = event.server.getLevel(monsterinfo.dim);
 
   // --- 召喚座標取得 ---
   let playersInDim = event.server.players.filter((p) => {
     let dimId = String(p.level.dimension);
-    return dimId === bossinfo.dim;
+    return dimId === monsterinfo.dim;
   });
 
   // --- ディメンションに1体のみ ---
+  let existing = getBossAlive(event, nowtick, monsterinfo);
   // 結果取得
-  let existing = level
-    .getEntities()
-    .filter((ent) => ent.type == bossinfo.bossid);
-  debug(`[${nowtick}][spawnBoss] info ${bossinfo.bossid} existing.length=${existing.length}`);
   if (existing.length > 0) {
     // スポーンキャンセル
     return;
   }
 
   // --- 死亡後時間経過チェック ---
-  let elapsed = nowtick - bossinfo.lastDeathTick;
+  let elapsed = nowtick - monsterinfo.lastDeathTick;
   debug(`[${nowtick}][spawnBoss] info elapsed=${elapsed} BOSS_COOLDOWN_TICKS:${BOSS_COOLDOWN_TICKS}`);
   if (elapsed < BOSS_COOLDOWN_TICKS) {
     // スポーンキャンセル
@@ -169,42 +162,36 @@ function spawnBoss(event, nowtick, bossinfo) {
   //let pos = { x: 20, y: 70, z: 20 };
   let pos = getRandomSpawnBlock(
     playersInDim,
-    bossinfo.bossSpawnRangeMin,
-    bossinfo.bossSpawnRangeMax,
+    monsterinfo.bossSpawnRangeMin,
+    monsterinfo.bossSpawnRangeMax,
     level,
     nowtick,
   );
 
   // --- 召喚コマンド実行 ---
-  event.server.runCommand(
-    `execute in ${bossinfo.dim} run summon ${bossinfo.bossid} ${pos.x} ${pos.y} ${pos.z} {PersistenceRequired:1b}`,
-    //`summon ${bossinfo.bossid} ${pos.x} ${pos.y} ${pos.z} {PersistenceRequired:1b}`,
-  );
-  debug(`[${nowtick}][spawnBoss] spawn {${bossinfo.bossid}} {${bossinfo.dim}} ${JSON.stringify(pos)}`);
+  event.server.runCommand(`execute in ${monsterinfo.dim} run summon ${monsterinfo.bossid} ${pos.x} ${pos.y} ${pos.z} {PersistenceRequired:1b}`);
+  debug(`[${nowtick}][spawnBoss] spawn {${monsterinfo.bossid}} {${monsterinfo.dim}} ${JSON.stringify(pos)}`);
 }
 
 // ====== MOB召喚 ======
-function spawnMob(event, nowtick, bossinfo) {
+function spawnMob(event, nowtick, monsterinfo) {
   debug(`[${nowtick}][spawnMob] start`);
 
-  let level = event.server.getLevel(bossinfo.dim);
+  let level = event.server.getLevel(monsterinfo.dim);
   let playersInDim = event.server.players.filter((p) => {
     let dimId = String(p.level.dimension);
-    return dimId === bossinfo.dim;
+    return dimId === monsterinfo.dim;
   });
 
-  // --- ボスの生存チェック ---
-  let existing = level
-    .getEntities()
-    .filter((ent) => ent.type == bossinfo.bossid);
-  debug(`[${nowtick}][spawnMob] info boss existing.length=${existing.length}`);
-  if (existing.length < 1) {
+  // --- ボスがいない場合スポーンしない ---
+  let existing = getBossAlive(event, nowtick, monsterinfo);
+  if (existing > 0) {
     // スポーンキャンセル
     return;
   }
 
   // --- ディメンションの個体数チェック ---
-  for (let mobinfo of bossinfo.mobinfos) {
+  for (let mobinfo of monsterinfo.mobinfos) {
     let mobExisting = level
       .getEntities()
       .filter((ent) => ent.type == mobinfo.mobid);
@@ -224,16 +211,14 @@ function spawnMob(event, nowtick, bossinfo) {
       // --- 召喚座標取得 ---
       let playersInDim = event.server.players.filter((p) => {
         let dimId = String(p.level.dimension);
-        return dimId === bossinfo.dim;
+        return dimId === monsterinfo.dim;
       });
-      let pos = getRandomSpawnBlock(existing, bossinfo.mobSpawnRangeMin, bossinfo.mobSpawnRangeMax, level, nowtick);
+      let pos = getRandomSpawnBlock(existing, monsterinfo.mobSpawnRangeMin, monsterinfo.mobSpawnRangeMax, level, nowtick);
 
       pos.y = pos.y + mobinfo.spawnHeight;
       // --- 召喚コマンド実行 ---
-      event.server.runCommandSilent(
-        `execute in ${bossinfo.dim} run summon ${mobinfo.mobid} ${pos.x} ${pos.y} ${pos.z}`,
-      );
-      debug(`[${nowtick}][spawnMob] spawn {${mobinfo.mobid}} {${bossinfo.dim}} ${JSON.stringify(pos)}`);
+      event.server.runCommandSilent(`execute in ${monsterinfo.dim} run summon ${mobinfo.mobid} ${pos.x} ${pos.y} ${pos.z}`);
+      debug(`[${nowtick}][spawnMob] spawn {${mobinfo.mobid}} {${monsterinfo.dim}} ${JSON.stringify(pos)}`);
     }
   }
 }
@@ -242,11 +227,11 @@ function spawnMob(event, nowtick, bossinfo) {
 function spawnMonster(event, nowtick) {
   debug(`[${nowtick}][spawnMonster] start`);
 
-  // --- bossinfos をループ ---
-  for (let bossinfo of bossinfos) {
-    debug(`[${nowtick}][spawnMonster] info boss:${bossinfo.bossid}`);
+  // --- monsterinfos をループ ---
+  for (let monsterinfo of monsterinfos) {
+    debug(`[${nowtick}][spawnMonster] info boss:${monsterinfo.bossid}`);
 
-    let level = event.server.getLevel(bossinfo.dim);
+    let level = event.server.getLevel(monsterinfo.dim);
 
     // --- ディメンションのロードチェック ---
     if (level == null) {
@@ -257,19 +242,19 @@ function spawnMonster(event, nowtick) {
     // --- ディメンション内のユーザ数チェック ---
     let playersInDim = event.server.players.filter((p) => {
       let dimId = String(p.level.dimension);
-      return dimId === bossinfo.dim;
+      return dimId === monsterinfo.dim;
     });
-    debug(`[${nowtick}][spawnMonster] info dim:${bossinfo.dim} playersInDim.length:${playersInDim.length}`);
+    debug(`[${nowtick}][spawnMonster] info dim:${monsterinfo.dim} playersInDim.length:${playersInDim.length}`);
     if (playersInDim.length == 0) {
       continue;
     }
 
     // --- ボス召喚処理 ---
-    spawnBoss(event, nowtick, bossinfo);
+    spawnBoss(event, nowtick, monsterinfo);
 
     // --- モブ召喚処理 ---
     if (nowtick % MOB_SPAWN_TICKS !== 0) {
-      spawnMob(event, nowtick, bossinfo);
+      spawnMob(event, nowtick, monsterinfo);
     }
   }
 }
@@ -277,24 +262,24 @@ function spawnMonster(event, nowtick) {
 function reward(event, nowtick) {
   debug(`[${nowtick}][reward] start`);
 
-  // --- bossinfos をループ ---
-  for (let bossinfo of bossinfos) {
-    debug(`[${nowtick}][reward] info boss:${bossinfo.bossid}`);
+  // --- monsterinfos をループ ---
+  for (let monsterinfo of monsterinfos) {
+    debug(`[${nowtick}][reward] info boss:${monsterinfo.bossid}`);
 
-    let level = event.server.getLevel(bossinfo.dim);
+    let level = event.server.getLevel(monsterinfo.dim);
 
     //死亡時間が10秒以内なら報酬発生
-    let elapsed = nowtick - bossinfo.lastDeathTick;
+    let elapsed = nowtick - monsterinfo.lastDeathTick;
     if (elapsed < 10 * 20) {
       let playersInDim = event.server.players.filter((p) => {
         let dimId = String(p.level.dimension);
-        return dimId === bossinfo.dim;
+        return dimId === monsterinfo.dim;
       });
 
-      let itemStr = buildChestItemsNBT(bossinfo.rewards);
+      let itemStr = buildChestItemsNBT(monsterinfo.rewards);
       let pos = getRandomSpawnBlock(playersInDim, 3, 3, level, nowtick);
-      event.server.runCommandSilent(`execute in ${bossinfo.dim} run setblock ${pos.x} ${pos.y} ${pos.z} minecraft:chest`);
-      event.server.runCommandSilent(`execute in ${bossinfo.dim} run data modify block ${pos.x} ${pos.y} ${pos.z} Items set value ${itemStr}`);
+      event.server.runCommandSilent(`execute in ${monsterinfo.dim} run setblock ${pos.x} ${pos.y} ${pos.z} minecraft:chest`);
+      event.server.runCommandSilent(`execute in ${monsterinfo.dim} run data modify block ${pos.x} ${pos.y} ${pos.z} Items set value ${itemStr}`);
 
       event.server.tell(`ボスを撃破しました。報酬箱が出現します。x:${pos.x}, y:${pos.y}, z:${pos.z}`);
       debug(`[${nowtick}][reward] reward chest x:${pos.x}, y:${pos.y}, z:${pos.z}`);
@@ -328,13 +313,13 @@ EntityEvents.death((event) => {
   const nowtick = event.server.getLevel("minecraft:overworld").time;
   debug(`[${nowtick}][death] start ${e.type}`);
 
-  // --- bossinfos をループ ---
-  for (let bossinfo of bossinfos) {
-    if (e.type !== bossinfo.bossid) continue;
-    if (e.level.dimension !== bossinfo.dim) continue;
+  // --- monsterinfos をループ ---
+  for (let monsterinfo of monsterinfos) {
+    if (e.type !== monsterinfo.bossid) continue;
+    if (e.level.dimension !== monsterinfo.dim) continue;
 
-    debug(`[${nowtick}][death] info ${bossinfo.bossid} died at ${nowtick} tick, the previous death was at ${bossinfo.lastDeathTick}`);
+    debug(`[${nowtick}][death] info ${monsterinfo.bossid} died at ${nowtick} tick, the previous death was at ${monsterinfo.lastDeathTick}`);
     // ボス死亡時刻の記録
-    bossinfo.lastDeathTick = nowtick;
+    monsterinfo.lastDeathTick = nowtick;
   }
 });
