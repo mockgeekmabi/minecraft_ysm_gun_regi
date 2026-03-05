@@ -35,6 +35,7 @@ ItemEvents.rightClicked((event) => {
         // 
         let block = getScaffoldingBlock(teleinfo.pos.x, teleinfo.pos.y, teleinfo.pos.z, level, nowtick);
         debug(`[${nowtick}][rightClicked] ${event.player.username} tp ${teleinfo.dim} ${block.x} ${block.y} ${block.z}`);
+        player.tell(`ワープ開始。ワールド読み込みまで時間がかかることがあります。`);
         player.server.runCommandSilent(`execute in ${teleinfo.dim} run tp ${player.uuid} ${block.x} ${block.y} ${block.z}`);
         return;
       }
@@ -42,6 +43,7 @@ ItemEvents.rightClicked((event) => {
       // endlessdesert → リスポーン地点 へ転移
       const info = inspectRespawnInfo(player);
       debug(`[${nowtick}][rightClicked] ${event.player.username} tp ${info.spawnDim} ${info.spawnPos.getX()} ${info.spawnPos.getY()} ${info.spawnPos.getZ()}`);
+      player.tell(`ワープ開始。ワールド読み込みまで時間がかかることがあります。`);
       player.server.runCommandSilent(`execute in ${info.spawnDim} run tp ${player.uuid} ${info.spawnPos.getX()} ${info.spawnPos.getY()} ${info.spawnPos.getZ()}`);
     }
   }
